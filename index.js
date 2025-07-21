@@ -5,7 +5,7 @@ const axios = require('axios');
 const path = require('path');
 
 const app = express();
-
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 // Enable CORS and parse JSON bodies
 app.use(cors());
 app.use(express.json());
@@ -18,6 +18,7 @@ app.post('/chat', async (req, res) => {
   if (!userMessage) {
     return res.status(400).json({ error: 'No message provided' });
   }
+  Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
 
   try {
     const response = await axios.post(
