@@ -9,6 +9,7 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 // Enable CORS and parse JSON bodies
 app.use(cors());
 app.use(express.json());
+console.log("🔑 OPENAI_API_KEY in backend is:", process.env.OPENAI_API_KEY);
 
 // Chat endpoint
 app.post('/chat', async (req, res) => {
