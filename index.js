@@ -46,6 +46,8 @@ app.post('/chat', async (req, res) => {
 app.use(express.static(path.join(__dirname)));
 
 // Start the server
-app.listen(3000, () => {
-  console.log('Medverse AI is running on port 3000');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Medverse AI is running on port ${PORT}`);
 });
+
