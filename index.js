@@ -5,21 +5,22 @@ const axios = require('axios');
 const path = require('path');
 
 const app = express();
+
+// ✅ Grab OpenAI key from environment
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-// Enable CORS and parse JSON bodies
+console.log("🔑 OPENAI_API_KEY in backend is:", OPENAI_API_KEY);
+
+// ✅ Enable CORS and parse JSON
 app.use(cors());
 app.use(express.json());
-console.log("🔑 OPENAI_API_KEY in backend is:", process.env.OPENAI_API_KEY);
 
-// Chat endpoint
+// 🧠 Chat endpoint
 app.post('/chat', async (req, res) => {
   const userMessage = req.body.message;
 
-  // 🛡️ Safety check: make sure message exists
   if (!userMessage) {
     return res.status(400).json({ error: 'No message provided' });
   }
-  Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
 
   try {
     const response = await axios.post(
@@ -30,26 +31,24 @@ app.post('/chat', async (req, res) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
           'Content-Type': 'application/json',
         },
       }
     );
 
-    // Send AI reply back to frontend or Postman
     res.json({ reply: response.data.choices[0].message.content });
   } catch (error) {
     console.error('OpenAI error:', error.message);
-    res.status(429).json({ error: 'Something went wrong or you hit a rate limit.' });
+    res.status(500).json({ error: 'AI request failed. Check API key or rate limit.' });
   }
 });
 
-// Serve static files (like index.html)
+// ✅ Serve static frontend
 app.use(express.static(path.join(__dirname)));
 
-// Start the server
+// ✅ Dynamic port support for Render
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Medverse AI is running on port ${PORT}`);
 });
-
